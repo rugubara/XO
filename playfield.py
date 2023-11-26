@@ -3,7 +3,7 @@ import cell
 import pfModel
 pfSize = 3
 class PlayField(pygame.Surface):  # класс отвечает за отрисовку доски и отправку событий мыши клеткам
-    def __init__(self, pfPixelSize, gutterWidth, cellSize):
+    def __init__(self, pfPixelSize, gutterWidth, cellSize, model):
         # global size
         super(PlayField, self).__init__(pfPixelSize)
         self.cells = []
@@ -12,10 +12,10 @@ class PlayField(pygame.Surface):  # класс отвечает за отрис�
         self.gameover_message_fontsize *= int(
             0.8 * pfPixelSize[0] / self.font.render("Победили крестики", True, pygame.Color("tomato")).get_rect().width)
         self.font = pygame.font.SysFont("Serif", self.gameover_message_fontsize, bold=False, italic=False)
-        self.model = pfModel.pfModel((pfSize, pfSize))
-        for i in range(pfSize):
+        self.model = model
+        for i in range(self.model.pfSize[0]):
             self.cells.append([])
-            for j in range(pfSize):
+            for j in range(self.model.pfSize[1]):
                 self.cells[i].append(cell.Cell((i, j), self.model, gutterWidth, cellSize))
 
     def draw(self, surface):

@@ -46,7 +46,7 @@ class pfModel():
                 self.endgame("")
             else:
                 self.player = (self.player + 1) % 2
-                pygame.display.set_caption("Крестики Нолики - ход " + "X" if self.player == 0 else "O")
+                pygame.display.set_caption("Крестики Нолики - ход " + ("X" if self.player == 0 else "O"))
                 self.Player[self.player].nextMove()
 
 

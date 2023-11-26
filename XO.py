@@ -4,6 +4,8 @@ import pygame
 import pygame.colordict
 import random
 import pygame_gui
+
+import pfModel
 import playfield
 
 
@@ -16,11 +18,12 @@ class XOApp:
         size = 703
         g = int(size / 19)
         c = 5 * g
-        print(c, g)
+        # print(c, g)
+        self.model = pfModel.pfModel((3,3))
         self.screen = pygame.display.set_mode([size] * 2)
         pygame.font.init()
         pygame.display.set_caption("Крестики Нолики - ход Х")
-        self.pf = playfield.PlayField(self.screen.get_size(), g, c)
+        self.pf = playfield.PlayField(self.screen.get_size(), g, c, self.model)
 
         return
     def run(self):
