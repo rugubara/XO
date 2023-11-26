@@ -12,7 +12,7 @@ class Cell(pygame.Surface): # класс отвечает за рисовани�
         self.model = modelPtr  # ссылка на модель игры
         self.value = modelPtr.getCellRef(pos)  # ссылка на клетку модели, соответствующую данной графической клетке
         self.mouseIn = False
-        self.gutterWidth = gutterWidth
+        self.gutterWidth = gutterWidth  #  пробел между клетками в пикселях
         self.cellSize = cellSize
         self.playerView = "X"  # строка для вывода очередности хода в заголовок
         self.update()
@@ -37,7 +37,7 @@ class Cell(pygame.Surface): # класс отвечает за рисовани�
                                int(self.cellSize / 2), int(self.gutterWidth / 2))
 
     def mouse_action(self, event): # метод отрабатывает события мыши - как движения, так и нажатия.
-        if event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP, pygame.MOUSEBUTTONDOWN):
+        if event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP, pygame.MOUSEBUTTONDOWN) and self.model.inGame:
             if event.type == pygame.MOUSEMOTION: # фильтруем по координатам и отрабатываем подсветку клетки под курсором
                 if self.value[0] == 0:
                     if self.rect.collidepoint(event.dict['pos']):
@@ -51,4 +51,3 @@ class Cell(pygame.Surface): # класс отвечает за рисовани�
                 self.playerView = playerViews[self.model.player + 1]
             self.update()  # обновить спрайт по результатам изменений состояний
 
-    #    <Event(4-MouseMotion {'pos': (327, 702), 'rel': (-5, 25), 'buttons': (0, 0, 0), 'window': None})>

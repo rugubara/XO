@@ -3,14 +3,14 @@ import pfModel
 #  модуль реализует 3 класса (+1 абстрактный), которые могут использоваться для реализации поведения игрока
 
 
-class Player():
+class Player():  #  это абстрактный класс с базовыми членами и методами.
     def __init__(self, model, modelPlayerCode):
         self.UI = False
         self.model = model
         self.playerCode = modelPlayerCode  # параметр содержит число 1 (X) или -1 (O), которое будет заполняться в клетку при ходе игрока
         return
 
-class HotseatPlayer(Player):
+class HotseatPlayer(Player):  # класс реализует поведение игрока, сидящего за компьютером
     def __init__(self, model, modelPlayerCode):
         super().__init__(model, modelPlayerCode)
         self.UI = True
@@ -18,7 +18,7 @@ class HotseatPlayer(Player):
     def nextMove(self):
         return
 
-class BotPlayer(Player):
+class BotPlayer(Player):  # класс реализует ИИ игрока
     def __init__(self, model, modelPlayerCode):
         super().__init__(model, modelPlayerCode)
         return
@@ -42,9 +42,9 @@ class BotPlayer(Player):
         for i in range(3):
             for j in range(3):
                 if self.model.model[i, j] == 0:
-                    cell_score = self.win(i, j, self.playerCode) * 10000 + self.win(i, j, -self.playerCode) * 500 + \
-                                self.open_line_2(i, j, self.playerCode) * 40 + self.open_line_2(i,j,-self.playerCode)*30 \
-                                     + self.open_line(i, j) * 9 - self.opForecastScore((i,j))*3//4
+                    cell_score = self.win(i, j, self.playerCode) * 10000 + self.win(i, j, -self.playerCode) * 1000 + \
+                                self.open_line_2(i, j, self.playerCode) * 100 + self.open_line_2(i,j,-self.playerCode)*50 \
+                                     + self.open_line(i, j) * 10 - self.opForecastScore((i,j))*3//4
 
                     if cell_score > score:
                         score, maxScorePos = cell_score, (i, j)

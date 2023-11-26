@@ -6,14 +6,16 @@ import Player
 class pfModel():
     def __init__(self, pfSize):
         self.model = np.full(pfSize, 0)
-        self.Player = []
-        self.Player.append( Player.BotPlayer(self, 1))  # кто играет за X
-        self.Player.append( Player.HotseatPlayer(self, -1))  # кто играет за O
+        self.winStat = [0]*3  #  список статистики побед по игрокам
+        self.inGame = False     #  флаг разрешает коду поля и клеток обрабатывать события мыши.
+        self.Player = []    #  список содержит 2 объекта игрока. 0 = для крестиков, 1 = для ноликов
+        self.Player.append( Player.HotseatPlayer(self, 1))  # кто играет за X
+        self.Player.append( Player.BotPlayer(self, -1))  # кто играет за O
         self.player = 0 #  индекс текущего игрока. Первым ходят крестики
-        self.pfSize = pfSize
-        self.winRow = 3
-        self.GameOver = False
-        self.Player[self.player].nextMove()
+        self.pfSize = pfSize   # playfield size = 3
+        self.winRow = 3         # сколько надо поставить в ряд для выигрыша
+        self.GameOver = False   # флаг конца игры
+        self.Player[self.player].nextMove()     # вызов кода для получения хода  очередного игрока
         return
     def RestartGame(self):
         r = self.model.reshape(self.pfSize[0]*self.pfSize[1])
@@ -23,13 +25,12 @@ class pfModel():
         self.GameOver = False
         self.Player[self.player].nextMove()
     def getCellRef(self, pos):
-        return self.model[pos[0]:pos[0]+1, pos[1]:pos[1]+1]
+        return self.model[pos[0]:pos[0]+1, pos[1]:pos[1]+1]   #  для получения ссылки на ячейку модели и сохранения в UI объекте cell
 
     def getCurrentPlayer(self):
         return self.Player[self.player]
 
-    def evaluate(self):  # refactor надо переписать, чтобы учитывать координату последнего хода и проверять только линейки, проходящие через него.
-                        # это метод вызывается в конце очередного хода для оценки позиции на предмет выигрыша или ничьей
+    def evaluate(self): # это метод вызывается в конце очередного хода для оценки позиции на предмет выигрыша или ничьей
         for i in range(self.pfSize[0]):
             if np.sum(self.model[i, :]) == 3 or np.sum(self.model[:, i]) == 3:
                 self.endgame("X")
@@ -52,12 +53,16 @@ class pfModel():
 
 
 
-    def endgame(self, win):
+    def endgame(self, win):  #  объявление победы и обновление статистики
         self.GameOver = True
+        # self.inGame = False
         self.win = win
         if win == "O":
             print("Победили нолики")
+            self.winStat[0] += 1
         elif win == "X":
             print("Победили крестики")
+            self.winStat[2] += 1
         else:
             print("Ничья")
+            self.winStat[1] += 1
